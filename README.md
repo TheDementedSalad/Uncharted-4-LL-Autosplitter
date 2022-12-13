@@ -24,6 +24,8 @@ If a split of yours split at the wrong time, contact TheDementedSalad.
 
 # Special thanks
 
-CursedToast for all of his work over the years on this game and many others.
+Mattmatt for finding most of the original pointers on game release which made them easy for me to re-find.
 
-Psarthex, zgl, qvaku, and DarkRageGames for helping Toast aquire the Cero D version.
+Tiny Kestrel for finding most of the Patch1 UC4 pointers
+
+
