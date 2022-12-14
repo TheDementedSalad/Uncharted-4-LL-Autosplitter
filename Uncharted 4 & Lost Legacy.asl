@@ -1,5 +1,5 @@
-//Uncharted 4 & LL IGT Autosplitter v 1.0 14/12/2022
-//Supports IGT and Autosplits
+//Uncharted: Legacy of Thieves Collection Autosplitter v 1.0 14/12/2022
+//Supports IGT and Autosplits for both Uncharted 4 & Lost Legacy
 //Script by TheDementedSalad & Mattmatt
 
 
