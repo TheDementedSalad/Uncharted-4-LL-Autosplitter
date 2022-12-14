@@ -1,25 +1,25 @@
-//Uncharted 4 & LL IGT Autosplitter v 1.0 13/12/2022
+//Uncharted 4 & LL IGT Autosplitter v 1.0 14/12/2022
 //Supports IGT and Autosplits
 //Script by TheDementedSalad & Mattmatt
 
 
 state("u4", "u4 Patch 1")
 {
-	int IGT				: 0x3B7CA90;
-	int menu			: 0x3D82C78;
-	string1 chapter		: 0x358D778, 0x34;
+	int IGT			: 0x3B7CA90;
+	int menu		: 0x3D82C78;
+	string2 chapter		: 0x358D778, 0x34;
 }
 
 state("tll", "tll Patch 1")
 {
-	int IGT				: 0x37EB308;
-	int menu			: 0x3F2CC88;
-	string1 chapter		: 0x3728B78, 0x34;
+	int IGT			: 0x37EB308;
+	int menu		: 0x3F2CC88;
+	string2 chapter		: 0x3728B78, 0x34;
 }
 
 start
 {
-	return current.IGT > 0 && old.IGT == 0 && current.chapter == "N" && current.menu == 0;
+	return current.IGT > 0 && old.IGT == 0 && current.chapter == "Ne" && current.menu == 0;
 }
 
 startup
@@ -27,7 +27,7 @@ startup
 	vars.completedSplits = new List<string>();
 	
 	vars.splits = new List<string>()
-	{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","E"};
+	{"1.","2.","3.","4.","5.","6.","7.","8.","9.","10","11","12","13","14","15","16","17","18","19","20","21","22","Ep","Fi"};
 }
 
 init
@@ -70,4 +70,9 @@ isLoading
 gameTime
 {
 	return TimeSpan.FromMilliseconds(current.IGT);
+}
+
+reset
+{
+	return current.IGT > 0 && old.IGT == 0 && current.chapter == "Ne" && current.menu == 0;
 }
