@@ -45,7 +45,7 @@ init
 
 update
 {
-	print(modules.First().ModuleMemorySize.ToString());
+	//print(modules.First().ModuleMemorySize.ToString());
 	
 	if(timer.CurrentPhase == TimerPhase.NotRunning)
 	{
