@@ -1,43 +1,15 @@
-//Uncharted: Legacy of Thieves Collection Autosplitter v 1.0.6 19/12/2022
+//Uncharted: Legacy of Thieves Collection Autosplitter v 2.0 31 March 2024
 //Supports IGT and Autosplits for both Uncharted 4 & Lost Legacy
-//Script by TheDementedSalad & Mattmatt
+//Script by TheDementedSalad
+//Original Pointers by Mattmatt
 
-
-state("u4", "u4 Patch 1")
-{
-	byte menu			: 0x3D82C78;
-	int IGT				: 0x3B7CA90;
-	string2 chapter		: 0x358D778, 0x34;
-}
-
-state("u4", "u4 Patch 2")
-{
-	byte menu			: 0x3D860D8;
-	int IGT				: 0x3B7FF10;
-	string2 chapter		: 0x3590BF8, 0x34;
-}
-
-state("tll", "tll Patch 1")
-{
-	byte menu			: 0x3F2CC88;
-	int IGT				: 0x37EB308;
-	string2 chapter		: 0x3728B78, 0x34;
-}
-
-state("tll", "tll Patch 2")
-{
-	byte menu			: 0x3F2E168;
-	int IGT				: 0x37EC808;
-	string2 chapter		: 0x3729FF8, 0x34;
-}
-
-start
-{
-	return current.IGT > 0 && old.IGT == 0 && current.chapter == "Ne" && current.menu == 0;
-}
+state("u4", "Uncharted 4"){}
+state("tll", "tll Patch 1"){}
 
 startup
 {
+	Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Basic");
+	
 	vars.completedSplits = new List<string>();
 	
 	vars.splits = new List<string>()
@@ -46,37 +18,44 @@ startup
 
 init
 {
-	switch (modules.First().ModuleMemorySize)
+	IntPtr InGameTime = vars.Helper.ScanRel(3, "48 89 05 ?? ?? ?? ?? 89 05 ?? ?? ?? ?? 8b de");
+	IntPtr CurrLevel = vars.Helper.ScanRel(3, "48 8b 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8d 05 ?? ?? ?? ?? 48 89 44 24");
+
+	vars.Helper["IGT"] = vars.Helper.Make<int>(InGameTime);
+	vars.Helper["Level"] = vars.Helper.MakeString(CurrLevel, 0x34);
+
+	
+	if (InGameTime == IntPtr.Zero || CurrLevel == IntPtr.Zero)
 	{
-		case (115699712):
-			version = "u4 Patch 1";
-			break;
-		case (115712000):
-			version = "u4 Patch 2";
-			break;
-		case (117776384):
-			version = "tll Patch 1";
-			break;
-		case (117780480):
-			version = "tll Patch 2";
-			break;
+		const string Msg = "Not all required addresses could be found by scanning.";
+		throw new Exception(Msg);
 	}
 }
 
 update
 {
 	//print(modules.First().ModuleMemorySize.ToString());
+	vars.Helper.Update();
+	vars.Helper.MapPointers();
+
 	
 	if(timer.CurrentPhase == TimerPhase.NotRunning)
 	{
 		vars.completedSplits.Clear();
 	}
+	
+	current.Lvl = current.Level.Substring(0, 2);
+}
+
+start
+{
+	return current.IGT > 0 && old.IGT == 0 && current.Lvl == "Ne";
 }
 
 split
 {
-	if (current.chapter != old.chapter && vars.splits.Contains(current.chapter) && !vars.completedSplits.Contains(current.chapter)){
-		vars.completedSplits.Add(current.chapter);
+	if (current.Lvl != old.Lvl && vars.splits.Contains(current.Lvl) && !vars.completedSplits.Contains(current.Lvl)){
+		vars.completedSplits.Add(current.Lvl);
 		return true;
 	}
 	
@@ -94,5 +73,5 @@ gameTime
 
 reset
 {
-	return current.IGT > 0 && old.IGT == 0 && current.chapter == "Ne" && current.menu == 0;
+	return current.IGT > 0 && old.IGT == 0 && current.Lvl == "Ne";
 }
